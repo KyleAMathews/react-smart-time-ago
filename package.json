@@ -6,6 +6,9 @@
   "bugs": {
     "url": "https://github.com/KyleAMathews/react-smart-time-ago/issues"
   },
+  "dependencies": {
+    "react-time": "^0.8.1"
+  },
   "devDependencies": {
     "coffee-react": "^0.4.0"
   },
