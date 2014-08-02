@@ -1,7 +1,7 @@
 {
   "name": "react-smart-time-ago",
   "description": "Show 'time ago' dates for anything in last two weeks and absolute dates from then back",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "bugs": {
     "url": "https://github.com/KyleAMathews/react-smart-time-ago/issues"
