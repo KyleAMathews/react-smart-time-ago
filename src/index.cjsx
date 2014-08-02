@@ -4,6 +4,7 @@ module.exports = React.createClass
   displayName: 'SmartTimeAgo'
   render: ->
     thisYear = moment().year() is moment(@props.value).year()
+
     # Show relative dates for tickets < two weeks old and absolute dates for anything
     # older.
     if 2 >= moment().diff(moment(@props.value), 'weeks')
