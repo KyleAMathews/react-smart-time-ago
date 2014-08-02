@@ -1,0 +1,28 @@
+{
+  "name": "react-smart-time-ago",
+  "description": "Show 'time ago' dates for anything in last two weeks and absolute dates from then back",
+  "version": "0.0.0",
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/KyleAMathews/react-smart-time-ago/issues"
+  },
+  "devDependencies": {
+    "coffee-react": "^0.4.0"
+  },
+  "homepage": "https://github.com/KyleAMathews/react-smart-time-ago",
+  "keywords": [
+    "react",
+    "react-component",
+    "timeago",
+    "moment"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "peerDependencies": {
+    "react": ">=0.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleAMathews/react-smart-time-ago.git"
+  }
+}
