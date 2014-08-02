@@ -9,6 +9,9 @@ release-minor:
 release-major:
 	@$(call release,major)
 
+build:
+	@$(BIN)/cjsx -cb -o dist src/index.cjsx
+
 publish:
 	git push --tags origin HEAD:master
 	npm publish

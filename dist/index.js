@@ -4,7 +4,7 @@ var Time;
 Time = require('react-time');
 
 module.exports = React.createClass({
-  displayName: 'Time',
+  displayName: 'SmartTimeAgo',
   render: function() {
     var thisYear;
     thisYear = moment().year() === moment(this.props.value).year();

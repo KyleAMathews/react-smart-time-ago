@@ -1,7 +1,7 @@
 Time = require 'react-time'
 
 module.exports = React.createClass
-  displayName: 'Time'
+  displayName: 'SmartTimeAgo'
   render: ->
     thisYear = moment().year() is moment(@props.value).year()
     # Show relative dates for tickets < two weeks old and absolute dates for anything
