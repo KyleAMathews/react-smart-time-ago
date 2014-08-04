@@ -1,4 +1,5 @@
 Time = require 'react-time'
+AutoupdateTime = require 'react-autoupdate-time'
 
 module.exports = React.createClass
   displayName: 'SmartTimeAgo'
@@ -9,7 +10,7 @@ module.exports = React.createClass
     # older.
     if 2 >= moment().diff(moment(@props.value), 'weeks')
       @transferPropsTo(
-        <Time relative autoUpdate />
+        <AutoupdateTime />
       )
     # Drop the year if it's this year.
     else if thisYear
