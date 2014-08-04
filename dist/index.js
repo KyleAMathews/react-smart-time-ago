@@ -20,7 +20,9 @@ module.exports = React.createClass({
     var thisYear;
     thisYear = moment().year() === moment(this.props.value).year();
     if (2 >= moment().diff(moment(this.props.value), 'weeks')) {
-      return this.transferPropsTo(AutoupdateTime(null));
+      return this.transferPropsTo(AutoupdateTime({
+        "autoUpdate": true
+      }));
     } else if (thisYear) {
       return this.transferPropsTo(Time({
         "format": "D MMM"

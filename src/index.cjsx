@@ -16,7 +16,7 @@ module.exports = React.createClass
     # older.
     if 2 >= moment().diff(moment(@props.value), 'weeks')
       @transferPropsTo(
-        <AutoupdateTime />
+        <AutoupdateTime autoUpdate />
       )
     # Drop the year if it's this year.
     else if thisYear

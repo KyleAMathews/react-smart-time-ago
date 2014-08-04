@@ -21,7 +21,9 @@ module.exports = React.createClass({
     var thisYear;
     thisYear = moment().year() === moment(this.props.value).year();
     if (2 >= moment().diff(moment(this.props.value), 'weeks')) {
-      return this.transferPropsTo(AutoupdateTime(null));
+      return this.transferPropsTo(AutoupdateTime({
+        "autoUpdate": true
+      }));
     } else if (thisYear) {
       return this.transferPropsTo(Time({
         "format": "D MMM"
@@ -34,18 +36,17 @@ module.exports = React.createClass({
   }
 });
 
-},{"moment":4,"react":151,"react-autoupdate-time":5,"react-time":6}],2:[function(require,module,exports){
+},{"moment":4,"react":297,"react-autoupdate-time":5,"react-time":152}],2:[function(require,module,exports){
 var SmartTimeAgo = require('../dist/index.js');
 var React = require('react');
 var moment = require('moment');
 console.log(React.renderComponentToString(SmartTimeAgo()));
 var date = new Date(1987, 4, 8, 5, 0, 0, 0);
-var veryRecent = new moment().subtract(3, 'hours');
 var recent = new moment().subtract(3, 'weeks');
 
-React.renderComponent(React.DOM.div(null, [SmartTimeAgo({value:veryRecent}), React.DOM.br(), SmartTimeAgo({value: recent}), React.DOM.br(), SmartTimeAgo({value:date})]), document.body);
+React.renderComponent(React.DOM.div(null, [SmartTimeAgo(), React.DOM.br(), SmartTimeAgo({value: recent}), React.DOM.br(), SmartTimeAgo({value:date})]), document.body);
 
-},{"../dist/index.js":1,"moment":4,"react":151}],3:[function(require,module,exports){
+},{"../dist/index.js":1,"moment":4,"react":297}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2970,9 +2971,39 @@ module.exports = React.createClass({
 var moment = require('moment');
 var React = require('react');
 
+function isNumber(value) {
+  return toString.call(value) === '[object Number]';
+}
+
 var Time = React.createClass({
 
   displayName: 'Time',
+  ticker: null,
+
+  getDefaultProps: function() {
+    return {
+      autoUpdate: false
+    };
+  },
+
+  componentDidMount: function() {
+    if (this.props.autoUpdate) {
+      var delay = isNumber(this.props.autoUpdate) ? this.props.autoUpdate * 1000 : 2600;
+
+      this.ticker = setInterval(this.invalidate, delay);
+    }
+  },
+
+  componentWillUnmount: function() {
+    if (this.ticker) {
+      clearInterval(this.ticker);
+      this.ticker = null;
+    }
+  },
+
+  invalidate: function() {
+    this.forceUpdate()
+  },
 
   render: function() {
     var value = this.props.value;
@@ -24065,4 +24096,336 @@ module.exports = warning;
 },{"./emptyFunction":109,"_process":3}],151:[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":34}]},{},[2]);
+},{"./lib/React":34}],152:[function(require,module,exports){
+"use strict";
+
+var moment = require('moment');
+var React = require('react');
+
+var Time = React.createClass({
+
+  displayName: 'Time',
+
+  render: function() {
+    var value = this.props.value;
+
+    if (Object.prototype.toString.call(value) == '[object String]') {
+      value = new Date(value);
+    }
+
+    value = moment(value);
+
+    var machineReadable = value.format('YYYY-MM-DDTHH:mm:ssZ');
+
+    var props = {};
+    for (var k in this.props) {
+      if (this.props.hasOwnProperty(k) &&
+          k !== 'value' &&
+          k !== 'relative' &&
+          k !== 'format')
+        props[k] = this.props[k];
+    }
+
+    if (this.props.relative || this.props.format) {
+      var humanReadable = this.props.relative ? value.fromNow() : value.format(this.props.format);
+      props.dateTime = machineReadable;
+      return React.DOM.time(props, humanReadable);
+    } else {
+      return React.DOM.time(props, machineReadable);
+    }
+  }
+});
+
+module.exports = Time;
+
+},{"moment":153,"react":297}],153:[function(require,module,exports){
+module.exports=require(7)
+},{}],154:[function(require,module,exports){
+arguments[4][8][0].apply(exports,arguments)
+},{"./focusNode":259}],155:[function(require,module,exports){
+arguments[4][9][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPropagators":173,"./ExecutionEnvironment":174,"./SyntheticInputEvent":239,"./keyOf":280}],156:[function(require,module,exports){
+module.exports=require(10)
+},{}],157:[function(require,module,exports){
+arguments[4][11][0].apply(exports,arguments)
+},{"./CSSProperty":156,"./dangerousStyleValue":254,"./hyphenateStyleName":271,"./memoizeStringOnly":282}],158:[function(require,module,exports){
+arguments[4][12][0].apply(exports,arguments)
+},{"./PooledClass":179,"./invariant":273,"./mixInto":286,"_process":3}],159:[function(require,module,exports){
+arguments[4][13][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPluginHub":170,"./EventPropagators":173,"./ExecutionEnvironment":174,"./ReactUpdates":229,"./SyntheticEvent":237,"./isEventSupported":274,"./isTextInputElement":276,"./keyOf":280}],160:[function(require,module,exports){
+module.exports=require(14)
+},{}],161:[function(require,module,exports){
+arguments[4][15][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPropagators":173,"./ExecutionEnvironment":174,"./ReactInputSelection":211,"./SyntheticCompositionEvent":235,"./getTextContentAccessor":268,"./keyOf":280}],162:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"./Danger":165,"./ReactMultiChildUpdateTypes":216,"./getTextContentAccessor":268,"./invariant":273,"_process":3}],163:[function(require,module,exports){
+arguments[4][17][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],164:[function(require,module,exports){
+arguments[4][18][0].apply(exports,arguments)
+},{"./DOMProperty":163,"./escapeTextForBrowser":257,"./memoizeStringOnly":282,"./warning":296,"_process":3}],165:[function(require,module,exports){
+arguments[4][19][0].apply(exports,arguments)
+},{"./ExecutionEnvironment":174,"./createNodesFromMarkup":253,"./emptyFunction":255,"./getMarkupWrap":265,"./invariant":273,"_process":3}],166:[function(require,module,exports){
+arguments[4][20][0].apply(exports,arguments)
+},{"./keyOf":280}],167:[function(require,module,exports){
+arguments[4][21][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPropagators":173,"./ReactMount":214,"./SyntheticMouseEvent":241,"./keyOf":280}],168:[function(require,module,exports){
+arguments[4][22][0].apply(exports,arguments)
+},{"./keyMirror":279}],169:[function(require,module,exports){
+arguments[4][23][0].apply(exports,arguments)
+},{"./emptyFunction":255,"_process":3}],170:[function(require,module,exports){
+arguments[4][24][0].apply(exports,arguments)
+},{"./EventPluginRegistry":171,"./EventPluginUtils":172,"./accumulate":247,"./forEachAccumulated":260,"./invariant":273,"./isEventSupported":274,"./monitorCodeUse":287,"_process":3}],171:[function(require,module,exports){
+arguments[4][25][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],172:[function(require,module,exports){
+arguments[4][26][0].apply(exports,arguments)
+},{"./EventConstants":168,"./invariant":273,"_process":3}],173:[function(require,module,exports){
+arguments[4][27][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPluginHub":170,"./accumulate":247,"./forEachAccumulated":260,"_process":3}],174:[function(require,module,exports){
+module.exports=require(28)
+},{}],175:[function(require,module,exports){
+arguments[4][29][0].apply(exports,arguments)
+},{"./DOMProperty":163,"./ExecutionEnvironment":174}],176:[function(require,module,exports){
+arguments[4][30][0].apply(exports,arguments)
+},{"./ReactPropTypes":222,"./invariant":273,"_process":3}],177:[function(require,module,exports){
+arguments[4][31][0].apply(exports,arguments)
+},{"./ReactBrowserEventEmitter":182,"./accumulate":247,"./forEachAccumulated":260,"./invariant":273,"_process":3}],178:[function(require,module,exports){
+arguments[4][32][0].apply(exports,arguments)
+},{"./EventConstants":168,"./emptyFunction":255}],179:[function(require,module,exports){
+arguments[4][33][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],180:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"./DOMPropertyOperations":164,"./EventPluginUtils":172,"./ExecutionEnvironment":174,"./ReactChildren":183,"./ReactComponent":184,"./ReactCompositeComponent":186,"./ReactContext":187,"./ReactCurrentOwner":188,"./ReactDOM":189,"./ReactDOMComponent":191,"./ReactDefaultInjection":201,"./ReactDescriptor":204,"./ReactInstanceHandles":212,"./ReactMount":214,"./ReactMultiChild":215,"./ReactPerf":218,"./ReactPropTypes":222,"./ReactServerRendering":226,"./ReactTextComponent":228,"./onlyChild":288,"_process":3}],181:[function(require,module,exports){
+arguments[4][35][0].apply(exports,arguments)
+},{"./ReactEmptyComponent":206,"./ReactMount":214,"./invariant":273,"_process":3}],182:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPluginHub":170,"./EventPluginRegistry":171,"./ReactEventEmitterMixin":208,"./ViewportMetrics":246,"./isEventSupported":274,"./merge":283}],183:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"./PooledClass":179,"./traverseAllChildren":295,"./warning":296,"_process":3}],184:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"./ReactDescriptor":204,"./ReactOwner":217,"./ReactUpdates":229,"./invariant":273,"./keyMirror":279,"./merge":283,"_process":3}],185:[function(require,module,exports){
+arguments[4][39][0].apply(exports,arguments)
+},{"./ReactDOMIDOperations":193,"./ReactMarkupChecksum":213,"./ReactMount":214,"./ReactPerf":218,"./ReactReconcileTransaction":224,"./getReactRootElementInContainer":267,"./invariant":273,"./setInnerHTML":291,"_process":3}],186:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"./ReactComponent":184,"./ReactContext":187,"./ReactCurrentOwner":188,"./ReactDescriptor":204,"./ReactDescriptorValidator":205,"./ReactEmptyComponent":206,"./ReactErrorUtils":207,"./ReactOwner":217,"./ReactPerf":218,"./ReactPropTransferer":219,"./ReactPropTypeLocationNames":220,"./ReactPropTypeLocations":221,"./ReactUpdates":229,"./instantiateReactComponent":272,"./invariant":273,"./keyMirror":279,"./mapObject":281,"./merge":283,"./mixInto":286,"./monitorCodeUse":287,"./shouldUpdateReactComponent":293,"./warning":296,"_process":3}],187:[function(require,module,exports){
+arguments[4][41][0].apply(exports,arguments)
+},{"./merge":283}],188:[function(require,module,exports){
+module.exports=require(42)
+},{}],189:[function(require,module,exports){
+arguments[4][43][0].apply(exports,arguments)
+},{"./ReactDOMComponent":191,"./ReactDescriptor":204,"./ReactDescriptorValidator":205,"./mapObject":281,"./mergeInto":285,"_process":3}],190:[function(require,module,exports){
+arguments[4][44][0].apply(exports,arguments)
+},{"./AutoFocusMixin":154,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189,"./keyMirror":279}],191:[function(require,module,exports){
+arguments[4][45][0].apply(exports,arguments)
+},{"./CSSPropertyOperations":157,"./DOMProperty":163,"./DOMPropertyOperations":164,"./ReactBrowserComponentMixin":181,"./ReactBrowserEventEmitter":182,"./ReactComponent":184,"./ReactMount":214,"./ReactMultiChild":215,"./ReactPerf":218,"./escapeTextForBrowser":257,"./invariant":273,"./keyOf":280,"./merge":283,"./mixInto":286,"_process":3}],192:[function(require,module,exports){
+arguments[4][46][0].apply(exports,arguments)
+},{"./EventConstants":168,"./LocalEventTrapMixin":177,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189}],193:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"./CSSPropertyOperations":157,"./DOMChildrenOperations":162,"./DOMPropertyOperations":164,"./ReactMount":214,"./ReactPerf":218,"./invariant":273,"./setInnerHTML":291,"_process":3}],194:[function(require,module,exports){
+arguments[4][48][0].apply(exports,arguments)
+},{"./EventConstants":168,"./LocalEventTrapMixin":177,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189}],195:[function(require,module,exports){
+arguments[4][49][0].apply(exports,arguments)
+},{"./AutoFocusMixin":154,"./DOMPropertyOperations":164,"./LinkedValueUtils":176,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189,"./ReactMount":214,"./invariant":273,"./merge":283,"_process":3}],196:[function(require,module,exports){
+arguments[4][50][0].apply(exports,arguments)
+},{"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189,"./warning":296,"_process":3}],197:[function(require,module,exports){
+arguments[4][51][0].apply(exports,arguments)
+},{"./AutoFocusMixin":154,"./LinkedValueUtils":176,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189,"./merge":283}],198:[function(require,module,exports){
+arguments[4][52][0].apply(exports,arguments)
+},{"./ExecutionEnvironment":174,"./getNodeForCharacterOffset":266,"./getTextContentAccessor":268}],199:[function(require,module,exports){
+arguments[4][53][0].apply(exports,arguments)
+},{"./AutoFocusMixin":154,"./DOMPropertyOperations":164,"./LinkedValueUtils":176,"./ReactBrowserComponentMixin":181,"./ReactCompositeComponent":186,"./ReactDOM":189,"./invariant":273,"./merge":283,"./warning":296,"_process":3}],200:[function(require,module,exports){
+arguments[4][54][0].apply(exports,arguments)
+},{"./ReactUpdates":229,"./Transaction":245,"./emptyFunction":255,"./mixInto":286}],201:[function(require,module,exports){
+arguments[4][55][0].apply(exports,arguments)
+},{"./BeforeInputEventPlugin":155,"./ChangeEventPlugin":159,"./ClientReactRootIndex":160,"./CompositionEventPlugin":161,"./DefaultEventPluginOrder":166,"./EnterLeaveEventPlugin":167,"./ExecutionEnvironment":174,"./HTMLDOMPropertyConfig":175,"./MobileSafariClickEventPlugin":178,"./ReactBrowserComponentMixin":181,"./ReactComponentBrowserEnvironment":185,"./ReactDOM":189,"./ReactDOMButton":190,"./ReactDOMForm":192,"./ReactDOMImg":194,"./ReactDOMInput":195,"./ReactDOMOption":196,"./ReactDOMSelect":197,"./ReactDOMTextarea":199,"./ReactDefaultBatchingStrategy":200,"./ReactDefaultPerf":202,"./ReactEventListener":209,"./ReactInjection":210,"./ReactInstanceHandles":212,"./ReactMount":214,"./SVGDOMPropertyConfig":230,"./SelectEventPlugin":231,"./ServerReactRootIndex":232,"./SimpleEventPlugin":233,"./createFullPageComponent":252,"_process":3}],202:[function(require,module,exports){
+arguments[4][56][0].apply(exports,arguments)
+},{"./DOMProperty":163,"./ReactDefaultPerfAnalysis":203,"./ReactMount":214,"./ReactPerf":218,"./performanceNow":290}],203:[function(require,module,exports){
+arguments[4][57][0].apply(exports,arguments)
+},{"./merge":283}],204:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"./ReactContext":187,"./ReactCurrentOwner":188,"./merge":283,"./warning":296,"_process":3}],205:[function(require,module,exports){
+arguments[4][59][0].apply(exports,arguments)
+},{"./ReactCurrentOwner":188,"./ReactDescriptor":204,"./ReactPropTypeLocations":221,"./monitorCodeUse":287}],206:[function(require,module,exports){
+arguments[4][60][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],207:[function(require,module,exports){
+module.exports=require(61)
+},{}],208:[function(require,module,exports){
+arguments[4][62][0].apply(exports,arguments)
+},{"./EventPluginHub":170}],209:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"./EventListener":169,"./ExecutionEnvironment":174,"./PooledClass":179,"./ReactInstanceHandles":212,"./ReactMount":214,"./ReactUpdates":229,"./getEventTarget":264,"./getUnboundedScrollPosition":269,"./mixInto":286}],210:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"./DOMProperty":163,"./EventPluginHub":170,"./ReactBrowserEventEmitter":182,"./ReactComponent":184,"./ReactCompositeComponent":186,"./ReactDOM":189,"./ReactEmptyComponent":206,"./ReactPerf":218,"./ReactRootIndex":225,"./ReactUpdates":229}],211:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"./ReactDOMSelection":198,"./containsNode":249,"./focusNode":259,"./getActiveElement":261}],212:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"./ReactRootIndex":225,"./invariant":273,"_process":3}],213:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"./adler32":248}],214:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"./DOMProperty":163,"./ReactBrowserEventEmitter":182,"./ReactCurrentOwner":188,"./ReactDescriptor":204,"./ReactInstanceHandles":212,"./ReactPerf":218,"./containsNode":249,"./getReactRootElementInContainer":267,"./instantiateReactComponent":272,"./invariant":273,"./shouldUpdateReactComponent":293,"./warning":296,"_process":3}],215:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"./ReactComponent":184,"./ReactMultiChildUpdateTypes":216,"./flattenChildren":258,"./instantiateReactComponent":272,"./shouldUpdateReactComponent":293}],216:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"./keyMirror":279}],217:[function(require,module,exports){
+arguments[4][71][0].apply(exports,arguments)
+},{"./emptyObject":256,"./invariant":273,"_process":3}],218:[function(require,module,exports){
+module.exports=require(72)
+},{"_process":3}],219:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"./emptyFunction":255,"./invariant":273,"./joinClasses":278,"./merge":283,"_process":3}],220:[function(require,module,exports){
+module.exports=require(74)
+},{"_process":3}],221:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"./keyMirror":279}],222:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"./ReactDescriptor":204,"./ReactPropTypeLocationNames":220,"./emptyFunction":255}],223:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"./PooledClass":179,"./ReactBrowserEventEmitter":182,"./mixInto":286}],224:[function(require,module,exports){
+arguments[4][78][0].apply(exports,arguments)
+},{"./CallbackQueue":158,"./PooledClass":179,"./ReactBrowserEventEmitter":182,"./ReactInputSelection":211,"./ReactPutListenerQueue":223,"./Transaction":245,"./mixInto":286}],225:[function(require,module,exports){
+module.exports=require(79)
+},{}],226:[function(require,module,exports){
+arguments[4][80][0].apply(exports,arguments)
+},{"./ReactDescriptor":204,"./ReactInstanceHandles":212,"./ReactMarkupChecksum":213,"./ReactServerRenderingTransaction":227,"./instantiateReactComponent":272,"./invariant":273,"_process":3}],227:[function(require,module,exports){
+arguments[4][81][0].apply(exports,arguments)
+},{"./CallbackQueue":158,"./PooledClass":179,"./ReactPutListenerQueue":223,"./Transaction":245,"./emptyFunction":255,"./mixInto":286}],228:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"./DOMPropertyOperations":164,"./ReactBrowserComponentMixin":181,"./ReactComponent":184,"./ReactDescriptor":204,"./escapeTextForBrowser":257,"./mixInto":286}],229:[function(require,module,exports){
+arguments[4][83][0].apply(exports,arguments)
+},{"./CallbackQueue":158,"./PooledClass":179,"./ReactCurrentOwner":188,"./ReactPerf":218,"./Transaction":245,"./invariant":273,"./mixInto":286,"./warning":296,"_process":3}],230:[function(require,module,exports){
+arguments[4][84][0].apply(exports,arguments)
+},{"./DOMProperty":163}],231:[function(require,module,exports){
+arguments[4][85][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPropagators":173,"./ReactInputSelection":211,"./SyntheticEvent":237,"./getActiveElement":261,"./isTextInputElement":276,"./keyOf":280,"./shallowEqual":292}],232:[function(require,module,exports){
+module.exports=require(86)
+},{}],233:[function(require,module,exports){
+arguments[4][87][0].apply(exports,arguments)
+},{"./EventConstants":168,"./EventPluginUtils":172,"./EventPropagators":173,"./SyntheticClipboardEvent":234,"./SyntheticDragEvent":236,"./SyntheticEvent":237,"./SyntheticFocusEvent":238,"./SyntheticKeyboardEvent":240,"./SyntheticMouseEvent":241,"./SyntheticTouchEvent":242,"./SyntheticUIEvent":243,"./SyntheticWheelEvent":244,"./invariant":273,"./keyOf":280,"_process":3}],234:[function(require,module,exports){
+arguments[4][88][0].apply(exports,arguments)
+},{"./SyntheticEvent":237}],235:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"./SyntheticEvent":237}],236:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"./SyntheticMouseEvent":241}],237:[function(require,module,exports){
+arguments[4][91][0].apply(exports,arguments)
+},{"./PooledClass":179,"./emptyFunction":255,"./getEventTarget":264,"./merge":283,"./mergeInto":285}],238:[function(require,module,exports){
+arguments[4][92][0].apply(exports,arguments)
+},{"./SyntheticUIEvent":243}],239:[function(require,module,exports){
+arguments[4][93][0].apply(exports,arguments)
+},{"./SyntheticEvent":237}],240:[function(require,module,exports){
+arguments[4][94][0].apply(exports,arguments)
+},{"./SyntheticUIEvent":243,"./getEventKey":262,"./getEventModifierState":263}],241:[function(require,module,exports){
+arguments[4][95][0].apply(exports,arguments)
+},{"./SyntheticUIEvent":243,"./ViewportMetrics":246,"./getEventModifierState":263}],242:[function(require,module,exports){
+arguments[4][96][0].apply(exports,arguments)
+},{"./SyntheticUIEvent":243,"./getEventModifierState":263}],243:[function(require,module,exports){
+arguments[4][97][0].apply(exports,arguments)
+},{"./SyntheticEvent":237,"./getEventTarget":264}],244:[function(require,module,exports){
+arguments[4][98][0].apply(exports,arguments)
+},{"./SyntheticMouseEvent":241}],245:[function(require,module,exports){
+arguments[4][99][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],246:[function(require,module,exports){
+arguments[4][100][0].apply(exports,arguments)
+},{"./getUnboundedScrollPosition":269}],247:[function(require,module,exports){
+arguments[4][101][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],248:[function(require,module,exports){
+module.exports=require(102)
+},{}],249:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"./isTextNode":277}],250:[function(require,module,exports){
+module.exports=require(104)
+},{"_process":3}],251:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./toArray":294}],252:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"./ReactCompositeComponent":186,"./invariant":273,"_process":3}],253:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"./ExecutionEnvironment":174,"./createArrayFrom":251,"./getMarkupWrap":265,"./invariant":273,"_process":3}],254:[function(require,module,exports){
+module.exports=require(108)
+},{"./CSSProperty":156}],255:[function(require,module,exports){
+module.exports=require(109)
+},{"./copyProperties":250}],256:[function(require,module,exports){
+module.exports=require(110)
+},{"_process":3}],257:[function(require,module,exports){
+module.exports=require(111)
+},{}],258:[function(require,module,exports){
+arguments[4][112][0].apply(exports,arguments)
+},{"./traverseAllChildren":295,"./warning":296,"_process":3}],259:[function(require,module,exports){
+module.exports=require(113)
+},{}],260:[function(require,module,exports){
+module.exports=require(114)
+},{}],261:[function(require,module,exports){
+module.exports=require(115)
+},{}],262:[function(require,module,exports){
+arguments[4][116][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],263:[function(require,module,exports){
+module.exports=require(117)
+},{}],264:[function(require,module,exports){
+module.exports=require(118)
+},{}],265:[function(require,module,exports){
+arguments[4][119][0].apply(exports,arguments)
+},{"./ExecutionEnvironment":174,"./invariant":273,"_process":3}],266:[function(require,module,exports){
+module.exports=require(120)
+},{}],267:[function(require,module,exports){
+module.exports=require(121)
+},{}],268:[function(require,module,exports){
+module.exports=require(122)
+},{"./ExecutionEnvironment":174}],269:[function(require,module,exports){
+module.exports=require(123)
+},{}],270:[function(require,module,exports){
+module.exports=require(124)
+},{}],271:[function(require,module,exports){
+module.exports=require(125)
+},{"./hyphenate":270}],272:[function(require,module,exports){
+arguments[4][126][0].apply(exports,arguments)
+},{"./invariant":273,"_process":3}],273:[function(require,module,exports){
+module.exports=require(127)
+},{"_process":3}],274:[function(require,module,exports){
+module.exports=require(128)
+},{"./ExecutionEnvironment":174}],275:[function(require,module,exports){
+module.exports=require(129)
+},{}],276:[function(require,module,exports){
+module.exports=require(130)
+},{}],277:[function(require,module,exports){
+module.exports=require(131)
+},{"./isNode":275}],278:[function(require,module,exports){
+module.exports=require(132)
+},{}],279:[function(require,module,exports){
+module.exports=require(133)
+},{"./invariant":273,"_process":3}],280:[function(require,module,exports){
+module.exports=require(134)
+},{}],281:[function(require,module,exports){
+module.exports=require(135)
+},{}],282:[function(require,module,exports){
+module.exports=require(136)
+},{}],283:[function(require,module,exports){
+arguments[4][137][0].apply(exports,arguments)
+},{"./mergeInto":285}],284:[function(require,module,exports){
+module.exports=require(138)
+},{"./invariant":273,"./keyMirror":279,"_process":3}],285:[function(require,module,exports){
+module.exports=require(139)
+},{"./mergeHelpers":284}],286:[function(require,module,exports){
+module.exports=require(140)
+},{}],287:[function(require,module,exports){
+module.exports=require(141)
+},{"./invariant":273,"_process":3}],288:[function(require,module,exports){
+arguments[4][142][0].apply(exports,arguments)
+},{"./ReactDescriptor":204,"./invariant":273,"_process":3}],289:[function(require,module,exports){
+module.exports=require(143)
+},{"./ExecutionEnvironment":174}],290:[function(require,module,exports){
+module.exports=require(144)
+},{"./performance":289}],291:[function(require,module,exports){
+module.exports=require(145)
+},{"./ExecutionEnvironment":174}],292:[function(require,module,exports){
+module.exports=require(146)
+},{}],293:[function(require,module,exports){
+module.exports=require(147)
+},{}],294:[function(require,module,exports){
+module.exports=require(148)
+},{"./invariant":273,"_process":3}],295:[function(require,module,exports){
+module.exports=require(149)
+},{"./ReactInstanceHandles":212,"./ReactTextComponent":228,"./invariant":273,"_process":3}],296:[function(require,module,exports){
+module.exports=require(150)
+},{"./emptyFunction":255,"_process":3}],297:[function(require,module,exports){
+module.exports=require(151)
+},{"./lib/React":180}]},{},[2]);
