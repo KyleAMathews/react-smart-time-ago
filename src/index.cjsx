@@ -1,8 +1,14 @@
+React = require 'react'
 Time = require 'react-time'
 AutoupdateTime = require 'react-autoupdate-time'
+moment = require 'moment'
 
 module.exports = React.createClass
   displayName: 'SmartTimeAgo'
+
+  getDefaultProps: ->
+    value: new Date()
+
   render: ->
     thisYear = moment().year() is moment(@props.value).year()
 
