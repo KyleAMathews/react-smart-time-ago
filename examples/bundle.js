@@ -2938,13 +2938,12 @@ module.exports = React.createClass({
   ticket: null,
   getDefaultProps: function() {
     return {
-      autoUpdate: true
+      autoUpdate: true,
+      interval: 3000
     };
   },
   componentDidMount: function() {
-    var delay;
-    delay = isNumber(this.props.autoUpdate) ? this.props.autoUpdate * 1000 : 3000;
-    return this.ticker = setInterval(this.invalidate, delay);
+    return this.ticker = setInterval(this.invalidate, this.props.interval);
   },
   componentWillUnmount: function() {
     if (this.ticker) {
