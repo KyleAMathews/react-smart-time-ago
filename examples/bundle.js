@@ -21,9 +21,7 @@ module.exports = React.createClass({
     var thisYear;
     thisYear = moment().year() === moment(this.props.value).year();
     if (2 >= moment().diff(moment(this.props.value), 'weeks')) {
-      return this.transferPropsTo(AutoupdateTime({
-        "autoUpdate": true
-      }));
+      return this.transferPropsTo(AutoupdateTime(null));
     } else if (thisYear) {
       return this.transferPropsTo(Time({
         "format": "D MMM"
@@ -2940,15 +2938,13 @@ module.exports = React.createClass({
   ticket: null,
   getDefaultProps: function() {
     return {
-      autoUpdate: false
+      autoUpdate: true
     };
   },
   componentDidMount: function() {
     var delay;
-    if (this.props.autoUpdate) {
-      delay = isNumber(this.props.autoUpdate) ? this.props.autoUpdate * 1000 : 3000;
-      return this.ticker = setInterval(this.invalidate, delay);
-    }
+    delay = isNumber(this.props.autoUpdate) ? this.props.autoUpdate * 1000 : 3000;
+    return this.ticker = setInterval(this.invalidate, delay);
   },
   componentWillUnmount: function() {
     if (this.ticker) {

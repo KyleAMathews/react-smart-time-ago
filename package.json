@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "moment": "^2.8.1",
-    "react-autoupdate-time": "0.0.2"
+    "react-autoupdate-time": "0.0.3"
   },
   "devDependencies": {
     "browserify": "^5.9.1",
