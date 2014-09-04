@@ -7,12 +7,12 @@
     "url": "https://github.com/KyleAMathews/react-smart-time-ago/issues"
   },
   "dependencies": {
-    "moment": "^2.8.1",
-    "react-autoupdate-time": "0.1.0"
+    "moment": "^2.8.2",
+    "react-autoupdate-time": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^5.9.1",
-    "coffee-react": "^0.4.0"
+    "browserify": "^5.11.0",
+    "coffee-react": "^0.5.1"
   },
   "homepage": "https://github.com/KyleAMathews/react-smart-time-ago",
   "keywords": [
