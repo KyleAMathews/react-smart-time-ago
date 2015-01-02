@@ -7,7 +7,7 @@
     "url": "https://github.com/KyleAMathews/react-smart-time-ago/issues"
   },
   "dependencies": {
-    "react-autoupdate-time": "^1.0.3",
+    "react-autoupdate-time": "^1.0.4",
     "react-time-temp-fork": "^2.1.2"
   },
   "devDependencies": {
