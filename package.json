@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "react-autoupdate-time": "^1.0.3",
-    "react-time": "^2.1.1"
+    "react-time-temp-fork": "^2.1.2"
   },
   "devDependencies": {
     "browserify": "^8.0.3",
