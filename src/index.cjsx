@@ -13,10 +13,6 @@ module.exports = React.createClass
     # Show relative dates for tickets < two weeks old and absolute dates for anything
     # older.
     if 2 >= moment().diff(moment(@props.value), 'weeks')
-      @transferPropsTo(
-        <AutoupdateTime />
-      )
+      <AutoupdateTime {...@props} />
     else
-      @transferPropsTo(
-        <Time format="D MMM YYYY" />
-      )
+      <Time format="D MMM YYYY" {...@props} />
