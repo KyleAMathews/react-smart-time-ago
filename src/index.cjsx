@@ -1,5 +1,5 @@
 React = require 'react'
-Time = require 'react-time-temp-fork'
+Time = require 'react-time'
 AutoupdateTime = require 'react-autoupdate-time'
 moment = require 'moment'
 
